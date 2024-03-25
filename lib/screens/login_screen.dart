@@ -5,8 +5,11 @@
 // import 'package:chat_app/screens/chat_screen.dart';
 // import 'package:chat_app/screens/register_screen.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+
 import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
+import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +148,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 CustomButton(
                   onTap: () {
-                    if (formKey.currentState!.validate()) {}
+                    if (formKey.currentState!.validate()) {
+                      log(emailController.text);
+                      log(passController.text);
+                      showSnackBar(context, "Login Success");
+                    } else {
+                      showSnackBar(context, "Login Failed");
+                    }
                   },
                   text: 'LOGIN',
                 ),
