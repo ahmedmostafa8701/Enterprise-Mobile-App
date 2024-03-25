@@ -4,6 +4,7 @@ import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
+import 'package:assign_1/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -470,7 +471,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.pushNamed(context, RegisterScreen.id);
                         Navigator.of(context).pop();
                       },
                       child: const Text(
