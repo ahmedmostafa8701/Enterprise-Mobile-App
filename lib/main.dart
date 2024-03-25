@@ -1,4 +1,5 @@
 import 'package:assign_1/screens/login_screen.dart';
+import 'package:assign_1/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,13 @@ class Assign extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(),
-      home: const LoginScreen(),
+
+      routes: {
+        LoginScreen.id: (context) => const LoginScreen(),
+        RegisterScreen.id: (context) => const RegisterScreen(),
+      },
+
+      initialRoute: LoginScreen.id,
     );
   }
 }
