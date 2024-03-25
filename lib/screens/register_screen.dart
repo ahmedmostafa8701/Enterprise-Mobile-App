@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
+import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -448,6 +449,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       log(level);
                       log(passController.text);
                       log(repassController.text);
+                      showSnackBar(context, "Signup Success");
+                    } else {
+                      showSnackBar(context, "Signup Failed");
                     }
                   },
                   text: 'LOGIN',
