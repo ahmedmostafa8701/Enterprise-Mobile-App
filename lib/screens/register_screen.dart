@@ -5,8 +5,10 @@ import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/screens/login_screen.dart';
+import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:sqflite/sqflite.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -41,6 +43,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController idController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController repassController = TextEditingController();
+
+  LocalDb localDb = LocalDb();
 
   @override
   Widget build(BuildContext context) {
@@ -443,19 +447,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomButton(
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      log(nameController.text);
-                      log(maleOrFemale);
-                      log(emailController.text);
-                      log(idController.text);
-                      log(level);
-                      log(passController.text);
-                      log(repassController.text);
-                      showSnackBar(context, "Signup Success");
+
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      try {
+                        List<Map>? idRes = await localDb.getData('''
+                            SELECT * FROM 'accounts' WHERE studId = '${idController.text}'
+                          ''');
+
+                        List<Map>? emailRes = await localDb.getData('''
+                            SELECT * FROM 'accounts' WHERE email = '${emailController.text}'
+                          ''');
+
+                        if ((idRes != null && idRes.isNotEmpty) || (emailRes != null && emailRes.isNotEmpty)) {
+                          showSnackBar(context, "Signup Failed (This student already exists)");
+                        } else {
+                          int? response = await localDb.insertData('''
+                            INSERT INTO 'accounts' ("studId", "email", "name", "gender", "level", "password", "image")
+                            VALUES ('${idController.text}', '${emailController.text}', '${nameController.text}', '$maleOrFemale', '$level', '${passController.text}', 'default image')
+                          ''');
+
+                          log(response as String);
+                          showSnackBar(context, "Signup Success");
+                        }
+
+                      } on DatabaseException catch (e) {
+                        log(e.toString());
+                        showSnackBar(context, "Database problem");
+                      } catch (e) {
+                        showSnackBar(context, e.toString());
+                      }
+
+
                     } else {
-                      showSnackBar(context, "Signup Failed");
+                      showSnackBar(context, "Signup Failed (Check the Fields)");
                     }
+
+                    setState(() {
+                      isLoading = false;
+                    });
+
                   },
-                  text: 'LOGIN',
+                  text: 'REGISTER',
                 ),
                 const SizedBox(
                   height: 30,
