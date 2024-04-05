@@ -495,6 +495,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 30,
                 ),
+                CustomButton(
+                  onTap: () async {
+
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    try {
+                      List<Map>? response = await localDb.getData('''
+                            SELECT * FROM 'accounts' WHERE studId = '20200406'
+                          ''');
+
+                      if (response!.isEmpty) {
+                        throw Exception("This user doesn't exist");
+                      }
+
+                      // print(response[0]);
+                      setState(() {
+                        nameController.text = response[0]['name'];
+                        maleOrFemale = response[0]['gender'];
+                        emailController.text = response[0]['email'];
+                        idController.text = response[0]['studId'];
+                        level = response[0]['level'];
+                        passController.text = response[0]['password'];
+                        repassController.text = response[0]['password'];
+                      });
+
+                    } on DatabaseException catch (e) {
+                      log(e.toString());
+                      showSnackBar(context, "Database problem");
+                    } catch (e) {
+                      showSnackBar(context, e.toString());
+                    }
+
+                    setState(() {
+                      isLoading = false;
+                    });
+
+                  },
+                  text: "Write demo data",
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
