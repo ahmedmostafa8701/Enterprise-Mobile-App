@@ -12,8 +12,10 @@ import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/screens/register_screen.dart';
+import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:sqflite/sqflite.dart';
 // import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -39,6 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   RegExp get _emailRegex =>
       RegExp(r'^[a-zA-Z0-9._%+-]+@stud\.fci-cu\.edu\.eg$');
+
+  LocalDb localDb = LocalDb();
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +151,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 30,
                 ),
                 CustomButton(
-                  onTap: () {
+                  onTap: () async {
+
                     if (formKey.currentState!.validate()) {
-                      log(emailController.text);
-                      log(passController.text);
-                      showSnackBar(context, "Login Success");
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      try {
+                        List<Map>? response = await localDb.getData('''
+                            SELECT * FROM 'accounts' WHERE email = '${emailController.text}' AND password = '${passController.text}'
+                          ''');
+
+                        if (response!.isEmpty) {
+                          showSnackBar(context, "Login Failed (Invalid email or password)");
+                        } else {
+                          showSnackBar(context, "Login Successfully");
+                          log(emailController.text);
+                          log(passController.text);
+                        }
+
+                      } on DatabaseException catch (e) {
+                        log(e.toString());
+                        showSnackBar(context, "Database problem");
+                      } catch (e) {
+                        showSnackBar(context, e.toString());
+                      }
+
+                      setState(() {
+                        isLoading = false;
+                      });
                     } else {
-                      showSnackBar(context, "Login Failed");
+                      showSnackBar(context, "Login Failed (Check the Fields)");
                     }
+
                   },
                   text: 'LOGIN',
                 ),
@@ -190,12 +220,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-// Future<void> loginUser() async {
-//   UserCredential user =
-//   await FirebaseAuth.instance.signInWithEmailAndPassword(
-//     email: email!,
-//     password: password!,
-//   );
-// }
 }
