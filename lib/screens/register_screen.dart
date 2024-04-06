@@ -4,6 +4,7 @@ import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
+import 'package:assign_1/screens/edit_screen.dart';
 import 'package:assign_1/screens/login_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
@@ -471,6 +472,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                           log(response as String);
                           showSnackBar(context, "Signup Success");
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditScreen(email: emailController.text),));
                         }
 
                       } on DatabaseException catch (e) {
