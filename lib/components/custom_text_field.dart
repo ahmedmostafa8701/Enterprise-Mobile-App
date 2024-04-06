@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     this.labelText,
     this.suffixIcon,
     this.controller,
+    this.enabled,
   });
 
   final String? hintText;
@@ -25,10 +26,12 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final Widget? suffixIcon;
   final TextEditingController? controller;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enabled,
       controller: controller,
       obscureText: obscureText,
       obscuringCharacter: '*',
