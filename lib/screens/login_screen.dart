@@ -1,22 +1,14 @@
-// import 'package:chat_app/components/custom_button.dart';
-// import 'package:chat_app/components/custom_text_field.dart';
-// import 'package:chat_app/constants.dart';
-// import 'package:chat_app/helper/show_snack_bar.dart';
-// import 'package:chat_app/screens/chat_screen.dart';
-// import 'package:chat_app/screens/register_screen.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer';
-
 import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
+import 'package:assign_1/screens/edit_screen.dart';
 import 'package:assign_1/screens/register_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sqflite/sqflite.dart';
-// import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -169,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           showSnackBar(context, "Login Successfully");
                           log(emailController.text);
                           log(passController.text);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditScreen(email: emailController.text),));
                         }
 
                       } on DatabaseException catch (e) {
