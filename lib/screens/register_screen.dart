@@ -5,7 +5,6 @@ import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/screens/edit_screen.dart';
-import 'package:assign_1/screens/login_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -495,7 +494,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   text: 'REGISTER',
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 CustomButton(
                   onTap: () async {
