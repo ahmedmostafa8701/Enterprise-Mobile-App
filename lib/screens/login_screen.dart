@@ -182,6 +182,45 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: 'LOGIN',
                 ),
                 const SizedBox(
+                  height: 15,
+                ),
+                CustomButton(
+                  onTap: () async {
+
+                    setState(() {
+                      isLoading = true;
+                    });
+
+                    try {
+                      List<Map>? response = await localDb.getData('''
+                            SELECT * FROM 'accounts' WHERE studId = '20200406'
+                          ''');
+
+                      if (response!.isEmpty) {
+                        throw Exception("This user doesn't exist");
+                      }
+
+                      // print(response[0]);
+                      setState(() {
+                        emailController.text = response[0]['email'];
+                        passController.text = response[0]['password'];
+                      });
+
+                    } on DatabaseException catch (e) {
+                      log(e.toString());
+                      showSnackBar(context, "Database problem");
+                    } catch (e) {
+                      showSnackBar(context, e.toString());
+                    }
+
+                    setState(() {
+                      isLoading = false;
+                    });
+
+                  },
+                  text: "Write demo data",
+                ),
+                const SizedBox(
                   height: 30,
                 ),
                 Row(
@@ -205,6 +244,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 70,
                 ),
               ],
             ),
