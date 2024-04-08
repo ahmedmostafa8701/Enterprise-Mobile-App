@@ -464,12 +464,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if ((idRes != null && idRes.isNotEmpty) || (emailRes != null && emailRes.isNotEmpty)) {
                           showSnackBar(context, "Signup Failed (This student already exists)");
                         } else {
-                          int? response = await localDb.insertData('''
+                          await localDb.insertData('''
                             INSERT INTO 'accounts' ("studId", "email", "name", "gender", "level", "password", "image")
                             VALUES ('${idController.text}', '${emailController.text}', '${nameController.text}', '$maleOrFemale', '$level', '${passController.text}', 'default image')
                           ''');
 
-                          log(response as String);
                           showSnackBar(context, "Signup Success");
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditScreen(email: emailController.text),));
                         }
