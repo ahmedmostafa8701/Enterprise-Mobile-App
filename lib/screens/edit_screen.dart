@@ -54,17 +54,6 @@ class _EditScreenState extends State<EditScreen> {
   File? image;
   String? localImage;
 
-  // Future imagePicker() async {
-  //   try {
-  //     final file = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //     setState(() {
-  //       image = File(file!.path);
-  //     });
-  //   } catch (e) {
-  //     showSnackBar(context, "The image is not selected");
-  //   }
-  // }
-
   Future uploadImage() async {
     if (image == null) {
       return;
@@ -90,7 +79,7 @@ class _EditScreenState extends State<EditScreen> {
       isLoading = true;
     });
 
-    // try {
+    try {
     currentResponse = await localDb.getData('''
                             SELECT * FROM 'accounts' WHERE email = '${widget.email}'
                           ''');
@@ -117,13 +106,13 @@ class _EditScreenState extends State<EditScreen> {
       }
     });
 
-    // }
-    // on DatabaseException catch (e) {
-    //   log(e.toString());
-    //   showSnackBar(context, "Database problem");
-    // } catch (e) {
-    //   showSnackBar(context, e.toString());
-    // }
+    }
+    on DatabaseException catch (e) {
+      log(e.toString());
+      showSnackBar(context, "Database problem");
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
 
     setState(() {
       isLoading = false;
@@ -687,25 +676,10 @@ class _EditScreenState extends State<EditScreen> {
                         if (enabled) {
                           return CustomButton(
                             onTap: () async {
-                              // setState(() {
-                              //   uploadImage();
-                              //   enabled = !enabled;
-                              // });
-
                               if (formKey.currentState!.validate()) {
                                 setState(() {
                                   isLoading = true;
                                 });
-
-                                // , "gender", "level", "password", "image")
-                                //VALUES (  '$maleOrFemale', '$level', '${passController.text}', 'default image')
-
-                                // nameController.text = currentResponse![0]['name'];
-                                // maleOrFemale = currentResponse![0]['gender'];
-                                // level = currentResponse![0]['level'];
-                                // passController.text = currentResponse![0]['password'];
-                                // repassController.text = currentResponse![0]['password'];
-                                // localImage = currentResponse![0]['image'];
 
                                 try {
                                   if (nameController.text !=
@@ -758,24 +732,20 @@ class _EditScreenState extends State<EditScreen> {
                                   } else {
                                     showSnackBar(context, "No Fields Changed");
                                   }
-
                                 } on DatabaseException catch (e) {
                                   log(e.toString());
                                   showSnackBar(context, "Database problem");
                                 } catch (e) {
                                   showSnackBar(context, e.toString());
                                 }
+
+                                setState(() {
+                                  isLoading = false;
+                                  enabled = !enabled;
+                                });
                               } else {
                                 showSnackBar(context, "Updating Failed");
                               }
-
-                              // getData();
-                              // print(currentResponse);
-
-                              setState(() {
-                                isLoading = false;
-                                enabled = !enabled;
-                              });
                             },
                             text: "Save",
                           );
@@ -791,6 +761,9 @@ class _EditScreenState extends State<EditScreen> {
 
                           if (!enabled) {
                             showSnackBar(context, "Update is Canceled");
+
+                            // To remove error messages if appeared
+                            formKey.currentState!.reset();
                             getData();
                           }
                         });
