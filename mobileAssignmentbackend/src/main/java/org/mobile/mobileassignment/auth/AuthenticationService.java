@@ -28,8 +28,8 @@ public class AuthenticationService {
     private final ImageService imageService;
 
     public ResponseAuthentication register(RequestRegister request, MultipartFile file) {
-        if (repository.existsByEmail(request.getEmail())) {
-            throw new EntityExistsException("User already exists with email: " + request.getEmail());
+        if (repository.existsByUserId(request.getUserId())) {
+            throw new EntityExistsException("User already exists with id: " + request.getUserId());
         }
 
         String imageUrl = null;
@@ -42,10 +42,9 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .level(request.getLevel())
                 .gender(request.getGender())
-                .password(request.getPassword())
-                .name(request.getName())
-                .imageUrl(imageUrl)
                 .password(passwordEncoder.encode(request.getPassword()))
+                .name(request.getName())
+                .imageUrl(imageUrl) // Use the updated imageUrl variable here
                 .build();
 
         repository.save(user);
@@ -54,17 +53,28 @@ public class AuthenticationService {
                 .token(jwtToken).build();
     }
 
-    public User editUser(RequestEditUser request, MultipartFile file) {
-        // Find the user by email or throw an exception if not found
-        User userToUpdate = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + request.getEmail()));
+
+    public User editUser(Integer id, RequestEditUser request, MultipartFile file) {
+        // Find the user by id or throw an exception if not found
+        User userToUpdate = repository.findUserByUserId(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
         // Update user information based on the request
-        userToUpdate.setName(request.getName());
-        userToUpdate.setEmail(request.getEmail());
-        userToUpdate.setLevel(request.getLevel());
-        userToUpdate.setPassword(passwordEncoder.encode(request.getPassword()));
-        userToUpdate.setGender(request.getGender());
+        if (request.getName() != null) {
+            userToUpdate.setName(request.getName());
+        }
+        if (request.getEmail() != null) {
+            userToUpdate.setEmail(request.getEmail());
+        }
+        if (request.getLevel() != null) {
+            userToUpdate.setLevel(request.getLevel());
+        }
+        if (request.getGender() != null) {
+            userToUpdate.setGender(request.getGender());
+        }
+        if (request.getPassword() != null) {
+            userToUpdate.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         // Update the user's profile picture if a new image is provided
         if (file != null && !file.isEmpty()) {
