@@ -6,7 +6,6 @@ import org.mobile.mobileassignment.dtos.ResponseAuthentication;
 import org.mobile.mobileassignment.dtos.RequestEditUser;
 import org.mobile.mobileassignment.dtos.RequestRegister;
 import org.mobile.mobileassignment.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,10 +19,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseAuthentication> register(
-            @RequestPart("user") RequestRegister request,
-            @RequestPart("image") MultipartFile image
+            @RequestPart("user") RequestRegister request
     ) {
-        return ResponseEntity.ok(authenticationService.register(request, image));
+        return ResponseEntity.ok(authenticationService.register(request, null));
     }
 
     @PostMapping("/login")
