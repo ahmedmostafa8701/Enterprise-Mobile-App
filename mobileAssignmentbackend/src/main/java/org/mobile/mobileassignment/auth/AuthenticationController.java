@@ -6,6 +6,7 @@ import org.mobile.mobileassignment.dtos.ResponseAuthentication;
 import org.mobile.mobileassignment.dtos.RequestEditUser;
 import org.mobile.mobileassignment.dtos.RequestRegister;
 import org.mobile.mobileassignment.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,13 +33,14 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.login(request));
     }
 
-    @PostMapping("/editUser")
+    @PatchMapping("/editUser/{id}")
     public ResponseEntity<User> editUser(
+            @PathVariable Integer id,
             @RequestBody RequestEditUser request,
             @RequestParam(value = "file", required = false) MultipartFile file
-
     ) {
-        return ResponseEntity.ok(authenticationService.editUser(request, file));
+        return ResponseEntity.ok(authenticationService.editUser(id, request, file));
     }
+
 
 }

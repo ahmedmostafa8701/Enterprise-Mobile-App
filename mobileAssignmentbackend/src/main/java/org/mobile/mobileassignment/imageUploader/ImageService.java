@@ -1,4 +1,5 @@
 package org.mobile.mobileassignment.imageUploader;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
     @Value("${upload-image}")
     private String uploadDir;
