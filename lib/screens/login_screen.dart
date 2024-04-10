@@ -6,6 +6,7 @@ import 'package:assign_1/constants.dart';
 import 'package:assign_1/screens/edit_screen.dart';
 import 'package:assign_1/screens/register_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sqflite/sqflite.dart';
@@ -144,7 +145,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 CustomButton(
                   onTap: () async {
-
                     if (formKey.currentState!.validate()) {
                       setState(() {
                         isLoading = true;
@@ -156,14 +156,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           ''');
 
                         if (response!.isEmpty) {
-                          showSnackBar(context, "Login Failed (Invalid email or password)");
+                          showSnackBar(context,
+                              "Login Failed (Invalid email or password)");
                         } else {
-                          showSnackBar(context, "Login Successfully");
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passController.text)
+                              .then((value) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  EditScreen(email: emailController.text),
+                            ));
+                          });
                           log(emailController.text);
                           log(passController.text);
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditScreen(email: emailController.text),));
+                          showSnackBar(context, "Login Successfully");
                         }
-
                       } on DatabaseException catch (e) {
                         log(e.toString());
                         showSnackBar(context, "Database problem");
@@ -177,7 +186,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     } else {
                       showSnackBar(context, "Login Failed (Check the Fields)");
                     }
-
                   },
                   text: 'LOGIN',
                 ),
@@ -186,7 +194,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 CustomButton(
                   onTap: () async {
-
                     setState(() {
                       isLoading = true;
                     });
@@ -205,7 +212,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         emailController.text = response[0]['email'];
                         passController.text = response[0]['password'];
                       });
-
                     } on DatabaseException catch (e) {
                       log(e.toString());
                       showSnackBar(context, "Database problem");
@@ -216,7 +222,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       isLoading = false;
                     });
-
                   },
                   text: "Write demo data",
                 ),

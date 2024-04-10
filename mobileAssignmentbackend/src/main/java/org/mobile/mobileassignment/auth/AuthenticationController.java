@@ -17,6 +17,11 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @GetMapping("/test")
+    public String test(){
+        return "testing succeed";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<ResponseAuthentication> register(
             @RequestPart("user") RequestRegister request
