@@ -212,6 +212,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     FocusScope.of(context).requestFocus(idFocus);
                     return "";
                   },
+                  keyboardType: TextInputType.emailAddress,
                   focusNode: mailFocus,
                   suffixIcon: const Icon(
                     Icons.mail,
@@ -231,6 +232,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     return null;
                   },
+                  keyboardType: TextInputType.number,
                   focusNode: idFocus,
                   onFieldSubmit: (value) {
                     FocusScope.of(context).requestFocus(passFocus);
