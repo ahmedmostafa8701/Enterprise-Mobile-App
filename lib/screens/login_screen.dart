@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return null;
                   },
+                  keyboardType: TextInputType.emailAddress,
                   suffixIcon: const Icon(
                     Icons.mail,
                     color: Colors.white,
