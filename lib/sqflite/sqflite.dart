@@ -7,7 +7,10 @@ import 'package:path/path.dart';
 class LocalDb {
 
   static Database? _db;
-
+  String lat = "lat";
+  String lng = "lng";
+  String storeName = "storeName";
+  String stores = "stores";
   Future<Database?> get db async {
     if (_db == null){
       _db = await initialDb();
@@ -36,7 +39,14 @@ class LocalDb {
         "image" TEXT NOT NULL
       )
     ''');
-
+    await db.execute('''
+      CREATE TABLE "$stores"(
+        "$storeName" TEXT NOT NULL,
+        "$lat" TEXT NOT NULL,
+        "$lng" TEXT NOT NULL
+      )
+      '''
+    );
     log("=================== Database Created ===================");
   }
 
