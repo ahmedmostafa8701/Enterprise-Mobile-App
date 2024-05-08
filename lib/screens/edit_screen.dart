@@ -7,6 +7,9 @@ import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -66,6 +69,21 @@ class _EditScreenState extends State<EditScreen> {
     log(image!.path);
   }
 
+  Future<String> uploadImageToFirebase(File imageFile) async {
+    // Create a reference to the location you want to upload to in Firebase Storage
+    String imageName = image!.path.split("/").last;
+    Reference ref = FirebaseStorage.instance.ref().child('images/$imageName');
+
+    // Upload the file to Firebase Storage
+    UploadTask uploadTask = ref.putFile(imageFile);
+
+    // Wait for the upload to complete and then return the download URL
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -99,6 +117,7 @@ class _EditScreenState extends State<EditScreen> {
       repassController.text = currentResponse![0]['password'];
       localImage = currentResponse![0]['image'];
 
+      // image = File(localImage!);
       if (localImage == 'default image') {
         image = null;
       } else {
@@ -588,7 +607,7 @@ class _EditScreenState extends State<EditScreen> {
                       height: 10,
                     ),
                     CustomTextField(
-                      enabled: enabled,
+                      enabled: false,
                       controller: passController,
                       validator: (data) {
                         if (data!.isEmpty) {
@@ -621,53 +640,6 @@ class _EditScreenState extends State<EditScreen> {
                       ),
                       obscureText: passwordIsHidden,
                     ),
-                    Builder(
-                      builder: (context) {
-                        if (enabled) {
-                          return Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              CustomTextField(
-                                controller: repassController,
-                                validator: (data) {
-                                  if (data!.isEmpty) {
-                                    return "The confirm password is required";
-                                  } else if (data.length < 8) {
-                                    return "The confirm password must be at least 8 characters";
-                                  } else if (passController.text !=
-                                      repassController.text) {
-                                    return "Password and Confirm Password must match";
-                                  }
-                                  return null;
-                                },
-                                focusNode: repassFocus,
-                                labelText: 'Confirm Password',
-                                hintText: "Rewrite your password here",
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      rePasswordIsHidden = !rePasswordIsHidden;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    rePasswordIsHidden
-                                        ? Icons.visibility_off_sharp
-                                        : Icons.visibility_sharp,
-                                    color: Colors.white,
-                                  ),
-                                  color: Colors.white,
-                                ),
-                                obscureText: rePasswordIsHidden,
-                              ),
-                            ],
-                          );
-                        } else {
-                          return Container();
-                        }
-                      },
-                    ),
                     const SizedBox(
                       height: 30,
                     ),
@@ -689,8 +661,7 @@ class _EditScreenState extends State<EditScreen> {
                                       level != currentResponse![0]['level'] ||
                                       passController.text !=
                                           currentResponse![0]['password'] ||
-                                      image!.path !=
-                                          currentResponse![0]['image']) {
+                                      (image != null && image!.path != currentResponse![0]['image'])) {
                                     if (nameController.text !=
                                         currentResponse![0]['name']) {
                                       await localDb.updateData('''
@@ -719,13 +690,27 @@ class _EditScreenState extends State<EditScreen> {
                                                                   ''');
                                     }
 
-                                    if (image!.path !=
-                                        currentResponse![0]['image']) {
+                                    DatabaseReference ref = FirebaseDatabase.instance.ref("$kUsersCollection/${FirebaseAuth.instance.currentUser!.uid}");
+
+                                    if (image != null && image!.path != currentResponse![0]['image']) {
+                                      String imageUrl = await uploadImageToFirebase(image!);
                                       await localDb.updateData('''
                                                                   UPDATE 'accounts' SET "image" = '${image!.path}' WHERE email = '${widget.email}'
                                                                   ''');
                                       log('image updated');
+
+                                      await ref.update({
+                                        "image": imageUrl,
+                                      });
+
                                     }
+
+                                    await ref.update({
+                                      "name": nameController.text,
+                                      "gender": maleOrFemale,
+                                      "level": level,
+                                      "password": passController.text,
+                                    });
 
                                     showSnackBar(context, "Updating Succeed");
                                     getData();

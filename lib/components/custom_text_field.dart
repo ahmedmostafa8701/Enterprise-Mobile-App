@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon,
     this.controller,
     this.enabled,
+    this.keyboardType,
   });
 
   final String? hintText;
@@ -27,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextEditingController? controller;
   final bool? enabled;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       onChanged: onChange,
       onFieldSubmitted: onFieldSubmit,
+      keyboardType: keyboardType,
       style: const TextStyle(
         color: Colors.white,
       ),
