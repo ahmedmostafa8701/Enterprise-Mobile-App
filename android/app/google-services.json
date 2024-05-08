@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "975893221294",
+    "firebase_url": "https://enterprise-mobile-app-983d8-default-rtdb.firebaseio.com",
+    "project_id": "enterprise-mobile-app-983d8",
+    "storage_bucket": "enterprise-mobile-app-983d8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975893221294:android:2b6e14e826799551e7c23f",
+        "android_client_info": {
+          "package_name": "com.example.assign_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoV_h7Wmj2LZVfZ3A7kB5embfXa1jpX1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

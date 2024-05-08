@@ -4,10 +4,17 @@ import 'package:assign_1/stores/cubit/store_cubit.dart';
 import 'package:assign_1/stores/cubit/store_state.dart';
 import 'package:assign_1/stores/presentation/pages/add_store.dart';
 import 'package:assign_1/stores/presentation/pages/stores_home.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const Assign());
 }
 
