@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../cubit/restaurant_cubit.dart';
-import '../../model/store.dart';
+import '../../model/restaurant.dart';
 
 class AddRestaurant extends StatefulWidget {
   const AddRestaurant({super.key});
@@ -92,7 +92,7 @@ class AddRestaurantState extends State<AddRestaurant> {
           }
           LatLng location = currentMarker?.position ?? initialCameraPosition.target;
           BlocProvider.of<RestaurantCubit>(context).addStore(
-            Store(
+            Restaurant(
               name: textController.text,
               location: location,
               id: '${Random().nextInt(10)}-${DateTime.now().millisecondsSinceEpoch.toString().replaceAll(" ", "")}',

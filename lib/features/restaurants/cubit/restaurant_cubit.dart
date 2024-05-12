@@ -4,16 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/local_data_source.dart';
 import '../data/remote_data_source.dart';
-import '../model/store.dart';
+import '../model/restaurant.dart';
 
 class RestaurantCubit extends Cubit<RestaurantState>{
   LocalDataSource localDataSource = LocalDataSource();
   RemoteDataSource remoteDataSource = RemoteDataSource();
-  List<Store> restaurants = [];
-  List<Store> favoriteRestaurants = [];
+  List<Restaurant> restaurants = [];
+  List<Restaurant> favoriteRestaurants = [];
   int mode = 0;
   RestaurantCubit() : super(InitialState());
-  void addStore(Store store) async{
+  void addStore(Restaurant store) async{
     // await remoteDataSource.addStore(store);
     await localDataSource.addStore(store);
     restaurants.add(store);

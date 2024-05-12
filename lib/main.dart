@@ -1,3 +1,4 @@
+import 'package:assign_1/features/restaurants/presentation/pages/product_page.dart';
 import 'package:assign_1/firebase_options.dart';
 import 'package:assign_1/screens/login_screen.dart';
 import 'package:assign_1/features/register/presentation/pages/register_screen.dart';
@@ -42,9 +43,10 @@ class Assign extends StatelessWidget {
           RegisterScreen.id: (context) => const RegisterScreen(),
           RestaurantHome.id: (context) => RestaurantHome(),
           AddRestaurant.id: (context) => const AddRestaurant(),
+          ProductPage.id: (context) => const ProductPage(),
         },
 
-        initialRoute: RestaurantHome.id,
+        initialRoute: ProductPage.id,
       ),
     );
   }

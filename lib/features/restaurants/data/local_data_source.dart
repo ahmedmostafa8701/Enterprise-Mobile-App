@@ -1,24 +1,23 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../sqflite/sqflite.dart';
-import '../model/store.dart';
+import '../model/restaurant.dart';
 
 class LocalDataSource{
   final LocalDb _localDb = LocalDb();
-  Future<void> addStore(Store store) async{
+  Future<void> addStore(Restaurant store) async{
     _localDb.addStore(store);
   }
-  Future<List<Store>> getRestaurants() async {
+  Future<List<Restaurant>> getRestaurants() async {
     List<Map> restaurants = await _localDb.getData('''
       SELECT * FROM '${_localDb.restaurants}'
     ''');
-    List<Store> storeList = [];
+    List<Restaurant> storeList = [];
     for (var item in restaurants) {
-      Store store = Store(
+      Restaurant store = Restaurant(
           name: item[_localDb.storeName],
           location: LatLng(double.parse(item[_localDb.lat]), double.parse(item[_localDb.lng])),
           id: item[_localDb.storeId],
-          favFlag: item[_localDb.favFlag]
       );
       storeList.add(store);
     }
@@ -28,7 +27,7 @@ class LocalDataSource{
   Future<void> removerestaurants()async {
     _localDb.removerestaurants();
   }
-  Future<void> addrestaurants(List<Store> restaurants) async{
+  Future<void> addrestaurants(List<Restaurant> restaurants) async{
     for (var store in restaurants) {
       _localDb.addStore(store);
     }

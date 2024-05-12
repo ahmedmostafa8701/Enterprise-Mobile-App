@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../features/restaurants/model/store.dart';
+import '../features/restaurants/model/restaurant.dart';
 
 class LocalDb {
 
@@ -72,10 +72,10 @@ class LocalDb {
     int response = await appDb!.rawInsert(sql);
     return response;
   }
-  addStore(Store store){
+  addStore(Restaurant store){
     insertData('''
-      INSERT INTO '$restaurants' ('$storeName', '$favFlag', '$storeId', '$lat','$lng')
-      VALUES ('${store.name}', '${store.favFlag}', '${store.id}', '${store.location.latitude.toString()}', '${store.location.longitude.toString()}')
+      INSERT INTO '$restaurants' ('$storeName', '$storeId', '$lat','$lng')
+      VALUES ('${store.name}', '${store.id}', '${store.location.latitude.toString()}', '${store.location.longitude.toString()}')
     ''');
   }
   updateData(String sql) async {
