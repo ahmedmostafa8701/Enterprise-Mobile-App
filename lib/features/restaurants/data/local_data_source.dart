@@ -24,10 +24,10 @@ class LocalDataSource{
     return storeList;
   }
 
-  Future<void> removerestaurants()async {
+  Future<void> removeRestaurants()async {
     _localDb.removerestaurants();
   }
-  Future<void> addrestaurants(List<Restaurant> restaurants) async{
+  Future<void> addRestaurants(List<Restaurant> restaurants) async{
     for (var store in restaurants) {
       _localDb.addStore(store);
     }
