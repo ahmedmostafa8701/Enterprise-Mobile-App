@@ -3,8 +3,9 @@ import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
+import 'package:assign_1/features/stores/presentation/pages/stores_home.dart';
 import 'package:assign_1/screens/edit_screen.dart';
-import 'package:assign_1/screens/register_screen.dart';
+import 'package:assign_1/features/register/presentation/pages/register_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               .then((value) {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  EditScreen(email: emailController.text),
+                                  StoreHome(),
                             ));
                           });
                           log(emailController.text);

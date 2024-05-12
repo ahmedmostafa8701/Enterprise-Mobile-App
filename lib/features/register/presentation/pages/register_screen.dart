@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../../../stores/presentation/pages/stores_home.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -487,11 +489,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               "level": level,
                               "password": passController.text,
                               "image": 'default image',
+                              "stores": [],
                             });
                           });
 
                           showSnackBar(context, "Signup Success");
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditScreen(email: emailController.text),));
+                          Navigator.of(context).pushNamed(StoreHome.id);
                         }
 
                       } on DatabaseException catch (e) {
