@@ -1,4 +1,4 @@
-import 'package:assign_1/features/stores/data/fire_refs.dart';
+import 'package:assign_1/features/restaurants/data/fire_refs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -12,15 +12,16 @@ class RemoteDataSource{
     if(user == null){
       return;
     }
-    await FirebaseDatabase.instance.ref('${FireRefs.stores}/${store.id}').set({
+    await FirebaseDatabase.instance.ref('${FireRefs.restaurants}/${store.id}').set({
       'name': store.name,
       'id' : store.id,
       'lng': store.location.longitude,
       'lat': store.location.latitude,
     });
-    await FirebaseDatabase.instance.ref('${FireRefs.users}/${user.uid}/${FireRefs.stores}/${store.id}').set({'id': store.id});
+    await FirebaseDatabase.instance.ref('${FireRefs.users}/${user.uid}/${FireRefs.restaurants}/${store.id}').set({'id': store.id});
+
   }
-  Future<List<Store>> getStores(DatabaseReference ref) async {
+  Future<List<Store>> getrestaurants(DatabaseReference ref) async {
     DataSnapshot snapshot = await ref.get();
     if(!snapshot.exists){
       return [];
@@ -35,21 +36,21 @@ class RemoteDataSource{
     }
     return [];
   }
-  Future<List<Store>> getAllStores() async{
+  Future<List<Store>> getAllrestaurants() async{
     var user = FirebaseAuth.instance.currentUser;
     if(user == null){
       return [];
     }
-    List<Store> stores = await getStores(FirebaseDatabase.instance.ref(FireRefs.stores));
-    List<String> favoriteStoresIds = await getFavoriteStores();
-    for (var store in stores) {
-      if(favoriteStoresIds.any((element) => element == store.id)){
+    List<Store> restaurants = await getrestaurants(FirebaseDatabase.instance.ref(FireRefs.restaurants));
+    List<String> favoriterestaurantsIds = await getFavoriterestaurants();
+    for (var store in restaurants) {
+      if(favoriterestaurantsIds.any((element) => element == store.id)){
         store.favFlag = 1;
       }
     }
-    return stores;
+    return restaurants;
   }
-  Future<List<String>> getFavoriteStores() async{
+  Future<List<String>> getFavoriterestaurants() async{
     var user = FirebaseAuth.instance.currentUser;
     if(user == null){
       return [];

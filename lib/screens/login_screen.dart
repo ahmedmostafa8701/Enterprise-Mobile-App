@@ -3,7 +3,7 @@ import 'package:assign_1/components/custom_button.dart';
 import 'package:assign_1/components/custom_text_field.dart';
 import 'package:assign_1/components/show_snack_bar.dart';
 import 'package:assign_1/constants.dart';
-import 'package:assign_1/features/stores/presentation/pages/stores_home.dart';
+import 'package:assign_1/features/restaurants/presentation/pages/restaurants_home.dart';
 import 'package:assign_1/screens/edit_screen.dart';
 import 'package:assign_1/features/register/presentation/pages/register_screen.dart';
 import 'package:assign_1/sqflite/sqflite.dart';
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               .then((value) {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  StoreHome(),
+                                  RestaurantHome(),
                             ));
                           });
                           log(emailController.text);

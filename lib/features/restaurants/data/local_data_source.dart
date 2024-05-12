@@ -8,12 +8,12 @@ class LocalDataSource{
   Future<void> addStore(Store store) async{
     _localDb.addStore(store);
   }
-  Future<List<Store>> getStores() async {
-    List<Map> stores = await _localDb.getData('''
-      SELECT * FROM '${_localDb.stores}'
+  Future<List<Store>> getRestaurants() async {
+    List<Map> restaurants = await _localDb.getData('''
+      SELECT * FROM '${_localDb.restaurants}'
     ''');
     List<Store> storeList = [];
-    for (var item in stores) {
+    for (var item in restaurants) {
       Store store = Store(
           name: item[_localDb.storeName],
           location: LatLng(double.parse(item[_localDb.lat]), double.parse(item[_localDb.lng])),
@@ -24,17 +24,12 @@ class LocalDataSource{
     }
     return storeList;
   }
-  Future<void> addToFavorite(Store store) async{
-    _localDb.fav(store.id);
+
+  Future<void> removerestaurants()async {
+    _localDb.removerestaurants();
   }
-  Future<void> removeFromFavorite(Store store) async{
-    _localDb.unFav(store.id);
-  }
-  Future<void> removeStores()async {
-    _localDb.removeStores();
-  }
-  Future<void> addStores(List<Store> stores) async{
-    for (var store in stores) {
+  Future<void> addrestaurants(List<Store> restaurants) async{
+    for (var store in restaurants) {
       _localDb.addStore(store);
     }
   }

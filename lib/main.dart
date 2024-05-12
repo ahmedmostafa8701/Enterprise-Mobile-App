@@ -1,14 +1,13 @@
 import 'package:assign_1/firebase_options.dart';
 import 'package:assign_1/screens/login_screen.dart';
 import 'package:assign_1/features/register/presentation/pages/register_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'features/stores/cubit/store_cubit.dart';
-import 'features/stores/presentation/pages/add_store.dart';
-import 'features/stores/presentation/pages/stores_home.dart';
+import 'features/restaurants/cubit/restaurant_cubit.dart';
+import 'features/restaurants/presentation/pages/add_restaurant.dart';
+import 'features/restaurants/presentation/pages/restaurants_home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,8 +28,8 @@ class Assign extends StatelessWidget {
     }*/
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StoreCubit>(
-          create: (context) => StoreCubit(),
+        BlocProvider<RestaurantCubit>(
+          create: (context) => RestaurantCubit(),
         ),
 
       ],
@@ -41,11 +40,11 @@ class Assign extends StatelessWidget {
         routes: {
           LoginScreen.id: (context) => const LoginScreen(),
           RegisterScreen.id: (context) => const RegisterScreen(),
-          StoreHome.id: (context) => StoreHome(),
-          AddStore.id: (context) => const AddStore(),
+          RestaurantHome.id: (context) => RestaurantHome(),
+          AddRestaurant.id: (context) => const AddRestaurant(),
         },
 
-        initialRoute: LoginScreen.id,
+        initialRoute: RestaurantHome.id,
       ),
     );
   }

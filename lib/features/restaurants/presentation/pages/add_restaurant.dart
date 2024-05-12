@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../cubit/store_cubit.dart';
+import '../../cubit/restaurant_cubit.dart';
 import '../../model/store.dart';
 
-class AddStore extends StatefulWidget {
-  const AddStore({super.key});
-  static String id = 'AddStore';
+class AddRestaurant extends StatefulWidget {
+  const AddRestaurant({super.key});
+  static String id = 'AddRestaurant';
 
   @override
-  AddStoreState createState() => AddStoreState();
+  AddRestaurantState createState() => AddRestaurantState();
 }
 
-class AddStoreState extends State<AddStore> {
+class AddRestaurantState extends State<AddRestaurant> {
   late LatLng latLng;
   TextEditingController textController = TextEditingController();
   static const CameraPosition initialCameraPosition = CameraPosition(
@@ -34,7 +34,7 @@ class AddStoreState extends State<AddStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Store'),
+        title: const Text('Add Restaurant'),
       ),
       body: Column(
         children: [
@@ -43,7 +43,7 @@ class AddStoreState extends State<AddStore> {
             child: TextField(
               controller: textController,
               decoration: const InputDecoration(
-                hintText: 'Store Name',
+                hintText: 'Restaurant Name',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
@@ -91,7 +91,7 @@ class AddStoreState extends State<AddStore> {
             return;
           }
           LatLng location = currentMarker?.position ?? initialCameraPosition.target;
-          BlocProvider.of<StoreCubit>(context).addStore(
+          BlocProvider.of<RestaurantCubit>(context).addStore(
             Store(
               name: textController.text,
               location: location,

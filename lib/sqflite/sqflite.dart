@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../features/stores/model/store.dart';
+import '../features/restaurants/model/store.dart';
 
 class LocalDb {
 
@@ -13,8 +13,8 @@ class LocalDb {
   String lng = "lng";
   String storeName = "storeName";
   String storeId = "storeId";
-  String stores = "stores";
-  String favoriteStores = 'favoriteStores';
+  String restaurants = "restaurants";
+  String favoriterestaurants = 'favoriterestaurants';
   String favFlag = "favFlag";
   Future<Database?> get db async {
     if (_db == null){
@@ -45,7 +45,7 @@ class LocalDb {
       )
     ''');
     await db.execute('''
-      CREATE TABLE "$stores"(
+      CREATE TABLE "$restaurants"(
         "$storeName" TEXT NOT NULL,
         "$storeId" TEXT Not NULL,
         "$favFlag" INTEGER DEFAULT 0,
@@ -74,7 +74,7 @@ class LocalDb {
   }
   addStore(Store store){
     insertData('''
-      INSERT INTO '$stores' ('$storeName', '$favFlag', '$storeId', '$lat','$lng')
+      INSERT INTO '$restaurants' ('$storeName', '$favFlag', '$storeId', '$lat','$lng')
       VALUES ('${store.name}', '${store.favFlag}', '${store.id}', '${store.location.latitude.toString()}', '${store.location.longitude.toString()}')
     ''');
   }
@@ -91,12 +91,12 @@ class LocalDb {
 
   fav(String id) async {
     Database? appDb = await db;
-    int response = await appDb!.update(stores, {favFlag: 1}, where: "$storeId = ?", whereArgs: [id]);
+    int response = await appDb!.update(restaurants, {favFlag: 1}, where: "$storeId = ?", whereArgs: [id]);
     return response;
   }
   unFav(String id) async {
     Database? appDb = await db;
-    int response = await appDb!.update(stores, {favFlag: 0}, where: "$storeId = ?", whereArgs: [id]);
+    int response = await appDb!.update(restaurants, {favFlag: 0}, where: "$storeId = ?", whereArgs: [id]);
     return response;
   }
   deleteAllData() async {
@@ -105,9 +105,9 @@ class LocalDb {
     await deleteDatabase(path);
   }
 
-  void removeStores() {
+  void removerestaurants() {
     deleteRaw('''
-      DELETE FROM '$stores'
+      DELETE FROM '$restaurants'
     ''');
   }
 }

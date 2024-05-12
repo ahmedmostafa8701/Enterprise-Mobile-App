@@ -1,21 +1,22 @@
-import 'package:assign_1/features/stores/model/grand_permission.dart';
+import 'package:assign_1/features/restaurants/model/grand_permission.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../cubit/store_cubit.dart';
-import '../../cubit/store_state.dart';
+import '../../cubit/restaurant_cubit.dart';
+import '../../cubit/restaurant_state.dart';
 import '../../model/store.dart';
 import '../widgets/store_widget.dart';
-import 'add_store.dart';
-class StoreHome extends StatelessWidget {
-  StoreHome({super.key});
-  static String id = 'StoreHome';
+import 'add_restaurant.dart';
+
+class RestaurantHome extends StatelessWidget {
+  RestaurantHome({super.key});
+  static String id = 'RestaurantHome';
   Color color = Colors.red;
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<StoreCubit>(context).getStores();
+    BlocProvider.of<RestaurantCubit>(context).getRestaurants();
     GrantPermissions.grantLocationPermission();
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +25,7 @@ class StoreHome extends StatelessWidget {
             icon: Icon(Icons.sync, color: Colors.red,),
             alignment: Alignment.topRight,
             onPressed: () {
-              BlocProvider.of<StoreCubit>(context).sync();
+              // BlocProvider.of<StoreCubit>(context).sync();
             },
           ),
         ],
@@ -33,26 +34,26 @@ class StoreHome extends StatelessWidget {
           icon: Icon(Icons.favorite, color: color,),
           alignment: Alignment.topRight,
           onPressed: () {
-            BlocProvider.of<StoreCubit>(context).switchMode();
+            // BlocProvider.of<StoreCubit>(context).switchMode();
           },
         )
       ),
-      body: BlocBuilder<StoreCubit, StoreState>(
+      body: BlocBuilder<RestaurantCubit, RestaurantState>(
         builder: (context, state) {
           if (state is InitialState) {
             return const Center(
               child: Text('No Store Added'),
             );
-          } else if(state is StoresUpdatedState){
+          } else if(state is RestaurantsUpdatedState){
             return Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: ListView.builder(
-                itemCount: state.stores.length,
+                itemCount: state.restaurants.length,
                 itemBuilder: (context, index) {
-                  Store store = state.stores[index];
+                  Store store = state.restaurants[index];
                   return StoreWidget(store: store,
                     onFavTap: (status) {
-                      BlocProvider.of<StoreCubit>(context).changeFavorite(store, status);
+                      // BlocProvider.of<StoreCubit>(context).changeFavorite(store, status);
                     },
                     onTap: () async {
                       Position location = await Geolocator.getCurrentPosition();
@@ -81,7 +82,7 @@ class StoreHome extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         onPressed: () {
-          Navigator.pushNamed(context, AddStore.id);
+          Navigator.pushNamed(context, AddRestaurant.id);
         },
         child: const Icon(
           Icons.add,
