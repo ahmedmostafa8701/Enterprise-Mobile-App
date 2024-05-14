@@ -46,6 +46,7 @@ dependencies:
   firebase_storage: ^11.7.1
   flutter_bloc: ^8.1.5
   geolocator: ^11.0.0
+  location: ^6.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

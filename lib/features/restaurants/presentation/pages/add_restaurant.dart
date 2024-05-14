@@ -95,7 +95,8 @@ class AddRestaurantState extends State<AddRestaurant> {
             Restaurant(
               name: textController.text,
               location: location,
-              id: '${Random().nextInt(10)}-${DateTime.now().millisecondsSinceEpoch.toString().replaceAll(" ", "")}',
+              id: Random().nextInt(10),
+
             ),
           );
           Navigator.pop(context);

@@ -5,7 +5,7 @@ class Restaurant{
   Restaurant({required this.name, required this.location, required this.id});
   String name;
   LatLng location;
-  String id;
+  int id;
   List<Product> ?products;
   static Restaurant fromJson(restaurant) {
     return Restaurant(
