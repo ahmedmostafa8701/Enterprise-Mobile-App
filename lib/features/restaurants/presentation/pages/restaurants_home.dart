@@ -1,17 +1,16 @@
 import 'package:assign_1/constants.dart';
 import 'package:assign_1/features/restaurants/model/grand_permission.dart';
+import 'package:assign_1/features/restaurants/presentation/pages/product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../../cubit/restaurant_cubit.dart';
 import '../../cubit/restaurant_state.dart';
 import '../../model/restaurant.dart';
 import '../widgets/restaurant_widget.dart';
-import 'add_restaurant.dart';
 
 class RestaurantHome extends StatelessWidget {
-  RestaurantHome({super.key});
+  const RestaurantHome({super.key});
   static String id = 'RestaurantHome';
 
   @override
@@ -22,10 +21,10 @@ class RestaurantHome extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            icon: Icon(Icons.sync, color: kSecondaryColor,),
+            icon: const Icon(Icons.sync, color: kSecondaryColor,),
             alignment: Alignment.topRight,
             onPressed: () {
-              // BlocProvider.of<StoreCubit>(context).sync();
+              BlocProvider.of<RestaurantCubit>(context).getRestaurants();
             },
           ),
         ],
@@ -37,7 +36,18 @@ class RestaurantHome extends StatelessWidget {
             return const Center(
               child: Text('No Restaurants Added'),
             );
-          } else if(state is RestaurantsUpdatedState){
+          }
+          else if(state is RestaurantsLoadingState){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          else if(state is RestaurantErrorState){
+            return Center(
+              child: Text(state.message),
+            );
+          }
+          else if(state is RestaurantsUpdatedState){
             return Padding(
               padding: const EdgeInsets.only(top: 16.0),
               child: GridView.builder(
@@ -45,20 +55,10 @@ class RestaurantHome extends StatelessWidget {
                 const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
                 itemCount: state.restaurants.length,
                 itemBuilder: (context, index) {
-                  Restaurant store = state.restaurants[index];
-                  return RestaurantWidget(restaurant: store,
+                  Restaurant restaurant = state.restaurants[index];
+                  return RestaurantWidget(restaurant: restaurant,
                     onTap: () async {
-                      Position location = await Geolocator.getCurrentPosition();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            '${Geolocator.distanceBetween(
-                                location.latitude, location.longitude,
-                                store.location.latitude , store.location.longitude)}',
-                          ),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
+                      Navigator.pushNamed(context, ProductPage.id,arguments: restaurant.id);
                     },
                   );
                 },
@@ -67,19 +67,6 @@ class RestaurantHome extends StatelessWidget {
           }
           return Container();
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        onPressed: () {
-          Navigator.pushNamed(context, AddRestaurant.id);
-        },
-        child: const Icon(
-          Icons.add,
-          color: kSecondaryColor,
-        ),
       ),
     );
   }

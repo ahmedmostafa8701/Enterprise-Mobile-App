@@ -8,7 +8,7 @@ class RestaurantsApi extends RestaurantsRepository {
   Future<List<Restaurant>> getAllRestaurants() async {
     List<Restaurant> restaurants = [];
     try {
-      var response = await dio.get('http://192.168.1.38:8080/api/v1/store');
+      var response = await dio.get('http://192.168.1.10:8080/api/v1/store');
       print(response.data);
       if (response.statusCode == 200 && response.data != null) {
         var list = await response.data as List;

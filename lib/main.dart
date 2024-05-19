@@ -7,8 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'features/restaurants/cubit/products_cubit.dart';
 import 'features/restaurants/cubit/restaurant_cubit.dart';
-import 'features/restaurants/presentation/pages/add_restaurant.dart';
 import 'features/restaurants/presentation/pages/restaurants_home.dart';
 
 void main() async {
@@ -33,6 +33,9 @@ class Assign extends StatelessWidget {
         BlocProvider<RestaurantCubit>(
           create: (context) => RestaurantCubit(),
         ),
+        BlocProvider<ProductsCubit>(
+          create: (context) => ProductsCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -43,11 +46,10 @@ class Assign extends StatelessWidget {
           LoginScreen.id: (context) => const LoginScreen(),
           RegisterScreen.id: (context) => const RegisterScreen(),
           RestaurantHome.id: (context) => RestaurantHome(),
-          AddRestaurant.id: (context) => const AddRestaurant(),
           ProductPage.id: (context) => const ProductPage(),
         },
 
-        initialRoute: RestaurantMap.id,
+        initialRoute: RestaurantHome.id,
       ),
     );
   }
